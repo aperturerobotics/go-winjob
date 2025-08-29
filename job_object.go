@@ -7,6 +7,7 @@ import (
 	"syscall"
 
 	"github.com/aperturerobotics/go-winjob/jobapi"
+	"golang.org/x/sys/windows"
 )
 
 // JobObject represents windows job object. Microsoft documentation says the
@@ -70,7 +71,7 @@ type Counters struct {
 }
 
 type JobInfo struct {
-	ExtendedLimits jobapi.JOBOBJECT_EXTENDED_LIMIT_INFORMATION
+	ExtendedLimits windows.JOBOBJECT_EXTENDED_LIMIT_INFORMATION
 	UIRestrictions jobapi.JOBOBJECT_BASIC_UI_RESTRICTIONS
 	AccountingInfo jobapi.JOBOBJECT_BASIC_AND_IO_ACCOUNTING_INFORMATION
 	CPURateControl jobapi.JOBOBJECT_CPU_RATE_CONTROL_INFORMATION
