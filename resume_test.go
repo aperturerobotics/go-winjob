@@ -1,4 +1,4 @@
-// +build windows
+//go:build windows
 
 package winjob_test
 
@@ -6,7 +6,7 @@ import (
 	"os/exec"
 	"testing"
 
-	"github.com/kolesnikovae/go-winjob"
+	"github.com/aperturerobotics/go-winjob"
 )
 
 func TestStart(t *testing.T) {

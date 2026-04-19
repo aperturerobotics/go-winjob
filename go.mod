@@ -1,5 +1,8 @@
-module github.com/kolesnikovae/go-winjob
+module github.com/aperturerobotics/go-winjob
 
-go 1.14
+go 1.26.0
 
-require golang.org/x/sys v0.0.0-20200625212154-ddb9806d33ae
+require (
+	github.com/pkg/errors v0.9.1
+	golang.org/x/sys v0.43.1-0.20260414013634-54fe89f84115 // master
+)

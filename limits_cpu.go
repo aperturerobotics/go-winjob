@@ -1,12 +1,9 @@
-// +build windows
+//go:build windows
 
 package winjob
 
 import (
-	"bytes"
-	"encoding/binary"
-
-	"github.com/kolesnikovae/go-winjob/jobapi"
+	"github.com/aperturerobotics/go-winjob/jobapi"
 )
 
 // WithCPUHardCapLimit controls CPU rate with hard limit, the value specifies
@@ -63,7 +60,7 @@ func (l cpuLimit) IsSet(job *JobObject) bool {
 	return job.CPURateControl.ControlFlags != 0
 }
 
-func (l cpuLimit) Value(job *JobObject) interface{} {
+func (l cpuLimit) Value(job *JobObject) any {
 	return l.LimitValue(job)
 }
 
@@ -79,10 +76,8 @@ func (l cpuLimit) LimitValue(job *JobObject) CPURate {
 	case job.CPURateControl.ControlFlags&jobapi.JOB_OBJECT_CPU_RATE_CONTROL_WEIGHT_BASED > 0:
 		r.Weight = job.CPURateControl.Value
 	case job.CPURateControl.ControlFlags&jobapi.JOB_OBJECT_CPU_RATE_CONTROL_MIN_MAX_RATE > 0:
-		var b bytes.Buffer
-		_ = binary.Write(&b, binary.LittleEndian, job.CPURateControl.Value)
-		r.Min = binary.LittleEndian.Uint16(b.Bytes()[:2])
-		r.Max = binary.LittleEndian.Uint16(b.Bytes()[2:])
+		r.Min = uint16(job.CPURateControl.Value)
+		r.Max = uint16(job.CPURateControl.Value >> 16)
 	}
 	return r
 }
@@ -98,10 +93,7 @@ func (l cpuLimit) set(job *JobObject) {
 		f = jobapi.JOB_OBJECT_CPU_RATE_CONTROL_WEIGHT_BASED
 	case l.Max > 0:
 		f = jobapi.JOB_OBJECT_CPU_RATE_CONTROL_MIN_MAX_RATE
-		var b bytes.Buffer
-		_ = binary.Write(&b, binary.LittleEndian, l.Min)
-		_ = binary.Write(&b, binary.LittleEndian, l.Max)
-		job.CPURateControl.Value = binary.LittleEndian.Uint32(b.Bytes())
+		job.CPURateControl.Value = uint32(l.Min) | uint32(l.Max)<<16
 	}
 	job.CPURateControl.ControlFlags = f |
 		jobapi.JOB_OBJECT_CPU_RATE_CONTROL_ENABLE |

@@ -1,8 +1,8 @@
-// +build windows
+//go:build windows
 
 package winjob
 
-import "github.com/kolesnikovae/go-winjob/jobapi"
+import "github.com/aperturerobotics/go-winjob/jobapi"
 
 // WithDesktopLimit prevents processes associated with the job from creating
 // desktops and switching desktops using the CreateDesktop and SwitchDesktop
@@ -79,6 +79,6 @@ func (r uiRestriction) IsSet(job *JobObject) bool {
 	return job.UIRestrictions.UIRestrictionsClass&jobapi.UIRestrictionsClass(r) > 0
 }
 
-func (r uiRestriction) Value(job *JobObject) interface{} {
+func (r uiRestriction) Value(job *JobObject) any {
 	return r.IsSet(job)
 }

@@ -1,4 +1,4 @@
-// +build windows
+//go:build windows
 
 package jobapi
 
@@ -557,7 +557,7 @@ func SetInformationJobObject(
 
 // QueryInfo performs QueryInformationJobObject call for the information class specified.
 // A pointer to the appropriate information type must be provided.
-func QueryInfo(hJobObject syscall.Handle, infoClass JobObjectInformationClass, v interface{}) error {
+func QueryInfo(hJobObject syscall.Handle, infoClass JobObjectInformationClass, v any) error {
 	var retLen uint32
 	return QueryInformationJobObject(hJobObject, infoClass,
 		unsafe.Pointer(reflect.ValueOf(v).Pointer()),
@@ -565,9 +565,9 @@ func QueryInfo(hJobObject syscall.Handle, infoClass JobObjectInformationClass, v
 		unsafe.Pointer(&retLen))
 }
 
-// QueryInfo performs SetInformationJobObject call for the information class specified.
+// SetInfo performs SetInformationJobObject call for the information class specified.
 // A pointer to the appropriate information type must be provided.
-func SetInfo(hJobObject syscall.Handle, infoClass JobObjectInformationClass, v interface{}) error {
+func SetInfo(hJobObject syscall.Handle, infoClass JobObjectInformationClass, v any) error {
 	return SetInformationJobObject(hJobObject, infoClass,
 		unsafe.Pointer(reflect.ValueOf(v).Pointer()),
 		uint32(reflect.TypeOf(v).Elem().Size()))

@@ -1,19 +1,19 @@
-// +build windows
+//go:build windows
 
 package winjob_test
 
 import (
 	"context"
-	"fmt"
 	"os"
 	"os/exec"
+	"strconv"
 	"syscall"
 	"testing"
 	"time"
 
 	"golang.org/x/sys/windows"
 
-	"github.com/kolesnikovae/go-winjob"
+	"github.com/aperturerobotics/go-winjob"
 )
 
 const (
@@ -22,7 +22,7 @@ const (
 )
 
 func newTestJobObject() (*winjob.JobObject, error) {
-	return winjob.Create(fmt.Sprintf("go-winjob-testing-%d", time.Now().UnixNano()))
+	return winjob.Create("go-winjob-testing-" + strconv.FormatInt(time.Now().UnixNano(), 10))
 }
 
 // runTestWithTestJobObjectWithProcess creates a new test job object with
@@ -112,7 +112,7 @@ func TestTerminate(t *testing.T) {
 		s, err := p.Wait()
 		requireNoError(t, err)
 		if s.ExitCode() != exitCode {
-			t.Fatalf("Espected exit code %d, got %d", exitCode, s.ExitCode())
+			t.Fatalf("expected exit code %d, got %d", exitCode, s.ExitCode())
 		}
 	})
 }

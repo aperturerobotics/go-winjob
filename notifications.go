@@ -1,14 +1,14 @@
-// +build windows
+//go:build windows
 
 package winjob
 
 import (
 	"errors"
-	"fmt"
+	"strconv"
 	"sync"
 	"syscall"
 
-	"github.com/kolesnikovae/go-winjob/jobapi"
+	"github.com/aperturerobotics/go-winjob/jobapi"
 )
 
 // Port is a wrapper for a job object IoCompletionPort.
@@ -116,7 +116,7 @@ func (p Port) NextMessage() (Notification, error) {
 	}
 	typ, ok := resolveNotificationType(jobapi.CompletionPortMessage(mType))
 	if !ok {
-		typ = NotificationType(fmt.Sprintf("%v", mType))
+		typ = NotificationType(strconv.FormatUint(uint64(mType), 10))
 	}
 	m := Notification{
 		Type: typ,

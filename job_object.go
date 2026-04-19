@@ -1,4 +1,4 @@
-// +build windows
+//go:build windows
 
 package winjob
 
@@ -6,7 +6,7 @@ import (
 	"os"
 	"syscall"
 
-	"github.com/kolesnikovae/go-winjob/jobapi"
+	"github.com/aperturerobotics/go-winjob/jobapi"
 )
 
 // JobObject represents windows job object. Microsoft documentation says the
@@ -43,7 +43,7 @@ type Limit interface {
 	// Value returns actual limit value for the job object.
 	// A Limit implementation may provide specific methods for
 	// accessing its values of a concrete type, if applicable.
-	Value(*JobObject) interface{}
+	Value(*JobObject) any
 
 	set(*JobObject)
 	reset(*JobObject)
@@ -105,7 +105,8 @@ func Open(name string) (*JobObject, error) {
 	return OpenWithAccess(name, jobapi.JOB_OBJECT_ALL_ACCESS)
 }
 
-// Open opens existing job object by its name with access rights specified.
+// OpenWithAccess opens an existing job object by its name with the access
+// rights specified.
 func OpenWithAccess(name string, access uintptr) (*JobObject, error) {
 	hJobObject, err := jobapi.OpenJobObject(access, 0, name)
 	if err != nil {
@@ -191,11 +192,15 @@ func (job *JobObject) QueryCounters(c *Counters) error {
 	if err != nil {
 		return err
 	}
+	job.copyCounters(c)
+	return nil
+}
 
+func (job *JobObject) copyCounters(c *Counters) {
 	c.TotalUserTime = job.AccountingInfo.TotalUserTime
-	c.TotalKernelTime = job.AccountingInfo.TotalUserTime
-	c.ThisPeriodTotalUserTime = job.AccountingInfo.TotalUserTime
-	c.ThisPeriodTotalKernelTime = job.AccountingInfo.TotalUserTime
+	c.TotalKernelTime = job.AccountingInfo.TotalKernelTime
+	c.ThisPeriodTotalUserTime = job.AccountingInfo.ThisPeriodTotalUserTime
+	c.ThisPeriodTotalKernelTime = job.AccountingInfo.ThisPeriodTotalKernelTime
 
 	c.TotalPageFaultCount = job.AccountingInfo.TotalPageFaultCount
 	c.TotalProcesses = job.AccountingInfo.TotalProcesses
@@ -207,9 +212,7 @@ func (job *JobObject) QueryCounters(c *Counters) error {
 	c.OtherOperationCount = job.AccountingInfo.OtherOperationCount
 	c.ReadTransferCount = job.AccountingInfo.ReadTransferCount
 	c.WriteTransferCount = job.AccountingInfo.WriteTransferCount
-	c.OtherTransferCount = job.AccountingInfo.OtherOperationCount
-
-	return nil
+	c.OtherTransferCount = job.AccountingInfo.OtherTransferCount
 }
 
 // QueryLimits queries all supported limit information for the job object.
@@ -289,7 +292,7 @@ func resolveRequiredInfoClass(limit Limit) jobapi.JobObjectInformationClass {
 	}
 }
 
-func (job *JobObject) infoPtr(infoClass jobapi.JobObjectInformationClass) interface{} {
+func (job *JobObject) infoPtr(infoClass jobapi.JobObjectInformationClass) any {
 	switch infoClass {
 	case jobapi.JobObjectBasicAndIoAccountingInformation:
 		return &job.AccountingInfo
@@ -335,7 +338,7 @@ func (job *JobObject) limitInfoClassesSet() (classes []jobapi.JobObjectInformati
 	return classes
 }
 
-type infoClassSync func(syscall.Handle, jobapi.JobObjectInformationClass, interface{}) error
+type infoClassSync func(syscall.Handle, jobapi.JobObjectInformationClass, any) error
 
 func (job *JobObject) sync(fn infoClassSync, infoClasses ...jobapi.JobObjectInformationClass) error {
 	for _, infoClass := range infoClasses {

@@ -1,4 +1,4 @@
-// +build windows
+//go:build windows
 
 package winjob_test
 
@@ -8,8 +8,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/kolesnikovae/go-winjob"
-	"github.com/kolesnikovae/go-winjob/jobapi"
+	"github.com/aperturerobotics/go-winjob"
+	"github.com/aperturerobotics/go-winjob/jobapi"
 )
 
 var (
@@ -20,7 +20,7 @@ var (
 
 type limitCase struct {
 	limit    winjob.Limit
-	expected interface{}
+	expected any
 }
 
 // There are special cases for:
@@ -134,7 +134,6 @@ func (c *limitCase) requireReset(t *testing.T, job *winjob.JobObject) {
 // a new job object is created for every limit.
 func TestLimits_Single(t *testing.T) {
 	for _, x := range limitCases {
-		x := x // var pinning for scopelint false-positive
 		runTestWithEmptyJobObject(t, func(job *winjob.JobObject) {
 			x.set(t, job)
 			requireNoError(t, job.QueryLimits())

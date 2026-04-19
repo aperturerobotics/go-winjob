@@ -1,11 +1,11 @@
-// +build windows
+//go:build windows
 
 package winjob
 
 import (
 	"time"
 
-	"github.com/kolesnikovae/go-winjob/jobapi"
+	"github.com/aperturerobotics/go-winjob/jobapi"
 )
 
 // WithBreakawayOK allows any process associated with the job to create child
@@ -234,7 +234,7 @@ func (l basicLimit) IsSet(job *JobObject) bool {
 	return job.ExtendedLimits.BasicLimitInformation.LimitFlags&jobapi.LimitFlag(l) > 0
 }
 
-func (l basicLimit) Value(job *JobObject) interface{} {
+func (l basicLimit) Value(job *JobObject) any {
 	return l.IsSet(job)
 }
 
@@ -257,7 +257,7 @@ func (l affinityLimit) set(job *JobObject) {
 	l.basicLimit.set(job)
 }
 
-func (l affinityLimit) Value(job *JobObject) interface{} {
+func (l affinityLimit) Value(job *JobObject) any {
 	return l.LimitValue(job)
 }
 
@@ -280,7 +280,7 @@ func (l jobMemoryLimit) set(job *JobObject) {
 	l.basicLimit.set(job)
 }
 
-func (l jobMemoryLimit) Value(job *JobObject) interface{} {
+func (l jobMemoryLimit) Value(job *JobObject) any {
 	return l.LimitValue(job)
 }
 
@@ -306,7 +306,7 @@ func (l jobTimeLimit) set(job *JobObject) {
 	l.basicLimit.set(job)
 }
 
-func (l jobTimeLimit) Value(job *JobObject) interface{} {
+func (l jobTimeLimit) Value(job *JobObject) any {
 	return l.LimitValue(job)
 }
 
@@ -329,7 +329,7 @@ func (l processMemoryLimit) set(job *JobObject) {
 	l.basicLimit.set(job)
 }
 
-func (l processMemoryLimit) Value(job *JobObject) interface{} {
+func (l processMemoryLimit) Value(job *JobObject) any {
 	return l.LimitValue(job)
 }
 
@@ -352,7 +352,7 @@ func (l processTimeLimit) set(job *JobObject) {
 	l.basicLimit.set(job)
 }
 
-func (l processTimeLimit) Value(job *JobObject) interface{} {
+func (l processTimeLimit) Value(job *JobObject) any {
 	return l.LimitValue(job)
 }
 
@@ -375,7 +375,7 @@ func (l activeProcessLimit) set(job *JobObject) {
 	l.basicLimit.set(job)
 }
 
-func (l activeProcessLimit) Value(job *JobObject) interface{} {
+func (l activeProcessLimit) Value(job *JobObject) any {
 	return l.LimitValue(job)
 }
 
@@ -424,7 +424,7 @@ func (l priorityClassLimit) set(job *JobObject) {
 	l.basicLimit.set(job)
 }
 
-func (l priorityClassLimit) Value(job *JobObject) interface{} {
+func (l priorityClassLimit) Value(job *JobObject) any {
 	return l.LimitValue(job)
 }
 
@@ -447,6 +447,6 @@ func (l schedulingClassLimit) set(job *JobObject) {
 	l.basicLimit.set(job)
 }
 
-func (l schedulingClassLimit) Value(job *JobObject) interface{} {
+func (l schedulingClassLimit) Value(job *JobObject) any {
 	return l.LimitValue(job)
 }

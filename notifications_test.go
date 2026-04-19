@@ -1,4 +1,4 @@
-// +build windows
+//go:build windows
 
 package winjob_test
 
@@ -9,7 +9,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/kolesnikovae/go-winjob"
+	"github.com/aperturerobotics/go-winjob"
 )
 
 const notificationsTestLimit = time.Second * 3

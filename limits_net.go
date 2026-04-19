@@ -1,9 +1,9 @@
-// +build windows
+//go:build windows
 
 package winjob
 
 import (
-	"github.com/kolesnikovae/go-winjob/jobapi"
+	"github.com/aperturerobotics/go-winjob/jobapi"
 )
 
 // WithOutgoingBandwidthLimit sets the maximum bandwidth for outgoing
@@ -54,7 +54,7 @@ func (l netBandwidthLimit) IsSet(job *JobObject) bool {
 	return job.NetRateControl.ControlFlags&jobapi.JOB_OBJECT_NET_RATE_CONTROL_MAX_BANDWIDTH > 0
 }
 
-func (l netBandwidthLimit) Value(job *JobObject) interface{} {
+func (l netBandwidthLimit) Value(job *JobObject) any {
 	return l.LimitValue(job)
 }
 
@@ -88,6 +88,6 @@ func (l netDSCPTagLimit) IsSet(job *JobObject) bool {
 	return job.NetRateControl.ControlFlags&jobapi.JOB_OBJECT_NET_RATE_CONTROL_DSCP_TAG > 0
 }
 
-func (l netDSCPTagLimit) Value(job *JobObject) interface{} {
+func (l netDSCPTagLimit) Value(job *JobObject) any {
 	return l.LimitValue(job)
 }

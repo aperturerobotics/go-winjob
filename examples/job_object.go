@@ -1,4 +1,4 @@
-// +build windows
+//go:build windows
 
 package main
 
@@ -12,7 +12,7 @@ import (
 
 	"golang.org/x/sys/windows"
 
-	"github.com/kolesnikovae/go-winjob"
+	"github.com/aperturerobotics/go-winjob"
 )
 
 var limits = []winjob.Limit{
@@ -34,7 +34,7 @@ func createCommand() *exec.Cmd {
 	case 2:
 		return exec.Command(os.Args[1])
 	default:
-		return exec.Command(os.Args[1], os.Args[1:]...)
+		return exec.Command(os.Args[1], os.Args[2:]...)
 	}
 }
 

@@ -1,4 +1,4 @@
-// +build windows
+//go:build windows
 
 package winjob_test
 
@@ -6,7 +6,7 @@ import (
 	"log"
 	"os/exec"
 
-	"github.com/kolesnikovae/go-winjob"
+	"github.com/aperturerobotics/go-winjob"
 )
 
 // The example demonstrates an efficient way to ensure no descendant processes
