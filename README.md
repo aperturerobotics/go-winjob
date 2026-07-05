@@ -1,7 +1,6 @@
 # go-winjob
 
 [![Go Reference](https://pkg.go.dev/badge/github.com/aperturerobotics/go-winjob.svg)](https://pkg.go.dev/github.com/aperturerobotics/go-winjob)
-[![Go Report Card](https://goreportcard.com/badge/github.com/aperturerobotics/go-winjob)](https://goreportcard.com/report/github.com/aperturerobotics/go-winjob)
 [![Tests](https://github.com/aperturerobotics/go-winjob/actions/workflows/tests.yml/badge.svg?branch=master)](https://github.com/aperturerobotics/go-winjob/actions/workflows/tests.yml)
 
 Go bindings for [Windows Job Objects](https://learn.microsoft.com/en-us/windows/win32/procthread/job-objects).
